@@ -9,6 +9,7 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.Circle;
@@ -218,12 +219,41 @@ public class Block {
 		
 		p = new ParallelTransition(sequentialTransition1,sequentialTransition2,sequentialTransition3,sequentialTransition4,sequentialTransition5);
 	}
-	public void Hit(Snake s) {
+	public void Hit(Snake s) {		
+		if(value<=5)
+		{
+			if(s.getLength()>=value)
+			{
+				p.play();
+				block.getChildren().remove(2);
+				block.getChildren().remove(1);
+				p.setOnFinished((e) ->{
+				block.getChildren().remove(0);
+				});
+				s.DecLength(value);
+				s.setScore(s.getScore()+value);
+			}
+			else
+			{
+				//gameover
+			}
+		}
+		else
+		{
+			//decrease length one by one
+			for(int i=0;i<s.getLength();i++)
+			{
+				s.DecLength(i);
+				
+			}
+		}
+	}
+	public void Destroy(Snake s) {
 		p.play();
 		block.getChildren().remove(2);
 		block.getChildren().remove(1);
 		p.setOnFinished((e) ->{
-			block.getChildren().remove(0);
+		block.getChildren().remove(0);
 		});
 		s.setScore(s.getScore()+value);
 	}
