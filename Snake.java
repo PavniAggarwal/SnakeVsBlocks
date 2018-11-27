@@ -1,5 +1,6 @@
 package application;
 
+import javafx.animation.Transition;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -15,8 +16,9 @@ public class Snake {
 	private Text ScoreBox;
 	private int length;
 	private int score;
+	private Transition transition;
 	Snake(Text t) {
-		length = 4;
+		length = 10;
 		score = 0;
 		snake = new Group();
 		LengthBox = new Text();
@@ -65,6 +67,12 @@ public class Snake {
 	public boolean moveLeft(int x, int y) {
 		return false;
 	}
+	public void setTransition(Transition tran) {
+		transition = tran;
+	}
+	public Transition getTransition() {
+		return transition;
+	}
 	public void IncLength(int n) {
 		for(int i=0;i<n;i++)
 		{
@@ -82,7 +90,7 @@ public class Snake {
 		{
 			if(length>0)
 			{
-				snake.getChildren().remove(length);
+				snake.getChildren().remove(length+1);
 				length--;
 				LengthBox.setText(String.valueOf(length));
 			}
