@@ -9,7 +9,6 @@ import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.Circle;
@@ -25,8 +24,11 @@ public class Block {
 	private Group block;
 	@FXML
 	private Group animate;
+	@FXML
+	private Text tb;
 	ParallelTransition p;
 	private int value;
+	
 	Block(int v, Group b) {
 		block = b;
 		animate = new Group();
@@ -58,7 +60,7 @@ public class Block {
 		int n = rand.nextInt(7);
 		rect.setFill(Colors[n]);
 		block.getChildren().add(rect);
-		Text tb = new Text();
+		tb = new Text();
 		if(v<10)
 		{
 			tb.setLayoutX(17.0);
@@ -240,11 +242,28 @@ public class Block {
 		}
 		else
 		{
-			//decrease length one by one
-			for(int i=0;i<s.getLength();i++)
+			for(int i=0;i<value;i++)
 			{
-				s.DecLength(i);
-				
+				if(s.getLength()>0)
+				{
+					s.DecLength(1);
+					value = value - 1;
+					tb.setText(String.valueOf(value));
+					s.setScore(s.getScore()+1);
+				}
+			}
+			if(value==0)
+			{
+				p.play();
+				block.getChildren().remove(2);
+				block.getChildren().remove(1);
+				p.setOnFinished((e) ->{
+				block.getChildren().remove(0);
+				});
+			}
+			else
+			{
+				//gameover
 			}
 		}
 	}
