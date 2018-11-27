@@ -16,7 +16,7 @@ public class Snake {
 	private int length;
 	private int score;
 	Snake(Text t) {
-		length = 5;
+		length = 4;
 		score = 0;
 		snake = new Group();
 		LengthBox = new Text();
@@ -24,13 +24,13 @@ public class Snake {
 		LengthBox.setLayoutX(-3.0);
 		LengthBox.setLayoutY(-10.0);
 		LengthBox.setStrokeWidth(0.0);
-		LengthBox.setText(String.valueOf(length-1));
+		LengthBox.setText(String.valueOf(length));
 		snake.getChildren().add(LengthBox);
 		Circle c = new Circle(8);
 		c.setFill(Color.valueOf("#f4eb37"));
 		c.setStroke(Color.BLACK);
 		snake.getChildren().add(c);
-		for(int i=0;i<length-1;i++)
+		for(int i=0;i<length;i++)
 		{
 			Circle c1 = new Circle(8);
 			c1.setFill(Color.valueOf("#f4eb37"));
@@ -41,7 +41,7 @@ public class Snake {
 		ScoreBox = t;
 	}
 	public void setLength(int l) {
-		length = l;
+		length = l-1;
 	}
 	public int getLength() {
 		return length;
@@ -69,22 +69,22 @@ public class Snake {
 		for(int i=0;i<n;i++)
 		{
 			Circle c = new Circle(8);
-			c.setLayoutY(length*15);
+			c.setLayoutY((length+1)*15);
 			c.setFill(Color.valueOf("#f4eb37"));
 			c.setStroke(Color.BLACK);
 			snake.getChildren().add(c);
 			length++;
-			LengthBox.setText(String.valueOf(length-1));
+			LengthBox.setText(String.valueOf(length));
 		}
 	}
 	public void DecLength(int n) {
 		for(int i=0;i<n;i++)
 		{
-			if(length>1)
+			if(length>0)
 			{
 				snake.getChildren().remove(length);
 				length--;
-				LengthBox.setText(String.valueOf(length-1));
+				LengthBox.setText(String.valueOf(length));
 			}
 		}
 	}
