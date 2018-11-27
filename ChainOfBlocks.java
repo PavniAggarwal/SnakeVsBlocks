@@ -1,5 +1,6 @@
 package application;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,13 +15,14 @@ public class ChainOfBlocks extends Token{
 	private ArrayList<Block> chain = new ArrayList<Block>();
 	private double[] XCoordinates = {7.0,53.0,99.0,145.0,191.0,237.0,283.0};
 	private int lengthOfChain;
+	private int GameOverFlag = 0;
 	ChainOfBlocks(int l,int length) {
 		ID = new Group();
 		lengthOfChain = l;
 		for(int i=0;i<lengthOfChain-1;i++)
 		{
 			Random rand = new Random();
-			int v = rand.nextInt(50) + 1;
+			int v = rand.nextInt(20) + 1;
 			Group b = new Group();
 			Block block = new Block(v,b);
 			int flag = 0;
@@ -59,10 +61,13 @@ public class ChainOfBlocks extends Token{
 	public Group getId() {
 		return ID;
 	}
+	public int getGameOverFlag() {
+		return GameOverFlag;
+	}
 	public void Hit(Snake s,AnchorPane AP) {
 		for(int i=0;i<lengthOfChain;i++)
 		{
-			if(s.getId().getLayoutX()>=chain.get(i).getId().getLayoutX() && s.getId().getLayoutX()<=chain.get(i).getId().getLayoutX()+45)
+			if(s.getId().getLayoutX()+8>=chain.get(i).getId().getLayoutX() && s.getId().getLayoutX()-8<=chain.get(i).getId().getLayoutX()+45)
 			{
 				if(s.getLength()>=chain.get(i).getValue())
 				{
@@ -78,6 +83,7 @@ public class ChainOfBlocks extends Token{
 				}
 				else
 				{
+					GameOverFlag = 1;
 					chain.get(i).Hit(s);
 				}
 			}
