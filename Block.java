@@ -1,12 +1,16 @@
 package application;
 
+import java.io.IOException;
 import java.util.Random;
 
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PathTransition;
+import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -242,16 +246,18 @@ public class Block {
 		}
 		else
 		{
+			s.getTransition().pause();
 			for(int i=0;i<value;i++)
 			{
-				if(s.getLength()>0)
+				if(s.getLength()>0 && value>0)
 				{
 					s.DecLength(1);
 					value = value - 1;
 					tb.setText(String.valueOf(value));
 					s.setScore(s.getScore()+1);
 				}
-			}
+		    }
+			//s.getTransition().play();
 			if(value==0)
 			{
 				p.play();
