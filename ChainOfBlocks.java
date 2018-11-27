@@ -64,16 +64,22 @@ public class ChainOfBlocks extends Token{
 		{
 			if(s.getId().getLayoutX()>=chain.get(i).getId().getLayoutX() && s.getId().getLayoutX()<=chain.get(i).getId().getLayoutX()+45)
 			{
-				chain.get(i).Hit(s);
-				s.DecLength(chain.get(i).getValue());
-				ParallelTransition p= chain.get(i).getAnimation();
-				final int j = i;
-				p.setOnFinished((e) ->{
-					ID.getChildren().remove(j);
-					chain.remove(j);
-					lengthOfChain--;
-				});
-				return;
+				if(s.getLength()>=chain.get(i).getValue())
+				{
+					chain.get(i).Hit(s);
+					ParallelTransition p= chain.get(i).getAnimation();
+					final int j = i;
+					p.setOnFinished((e) ->{
+						ID.getChildren().remove(j);
+						chain.remove(j);
+						lengthOfChain--;
+					});
+					return;
+				}
+				else
+				{
+					chain.get(i).Hit(s);
+				}
 			}
 		}
 		if(lengthOfChain==0)
@@ -84,7 +90,7 @@ public class ChainOfBlocks extends Token{
 	public void Destroy(Snake s) {
 		for(int i=0;i<lengthOfChain;i++)
 		{
-			chain.get(i).Hit(s);
+			chain.get(i).Destroy(s);
 		}
 		chain = null;
 		lengthOfChain = 0;
@@ -94,7 +100,7 @@ public class ChainOfBlocks extends Token{
 		{
 			if(s.getId().getLayoutX()>=chain.get(i).getId().getLayoutX() && s.getId().getLayoutX()<=chain.get(i).getId().getLayoutX()+45)
 			{
-				chain.get(i).Hit(s);
+				chain.get(i).Destroy(s);
 				ParallelTransition p= chain.get(i).getAnimation();
 				final int j = i;
 				p.setOnFinished((e) ->{
