@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.ResourceBundle;
 
 import com.sun.javafx.geom.Vec2d;
@@ -151,8 +152,8 @@ public class GameController implements Initializable
 	Magnet m;
 	Game game;
 	Shield s;
-	int flag1=0;
-	int flag2=0;
+	int ShieldFlag = 0;
+	int GameOverFlag = 0;
 	ArrayList<Token> tokens = new ArrayList<Token>();
 	@Override
 	public void initialize(URL url, ResourceBundle rb)
@@ -177,15 +178,13 @@ public class GameController implements Initializable
 		transition.setPath(path);
 		transition.play();
 		transitionIsPlay = true;
-		setTransition1();
-		setTransition2();
-		setTransition3();
-		setTransition4();
-		setTransition5();
-		setTransition6();
 		Timeline timeline = new Timeline(new KeyFrame(
-				Duration.millis(5),
-				ae-> onHit()));
+				Duration.millis(50),
+				ae-> {
+					try {
+						onHit();
+					} catch (IOException e1) {}
+				}));
 		timeline.setCycleCount(Animation.INDEFINITE);
 		timeline.play();
 		try {
@@ -228,18 +227,18 @@ public class GameController implements Initializable
 		s.getId().setLayoutX(230);
 		AP.getChildren().add(s.getId());
 		tokens.add(s);
-		if(s.getClass().equals(Shield.class))
-		{
-			System.out.println("Same");
-		}
-//		ArrayList<ChainOfBlocks> arr = new ArrayList<ChainOfBlocks>();
-//		arr.add(c);
+//		if(s.getClass().equals(Shield.class))
+//		{
+//			System.out.println("Same");
+//		}
+		ArrayList<ChainOfBlocks> arr = new ArrayList<ChainOfBlocks>();
+		arr.add(c);
 //		d = new DestroyBlock();
 //		d.getId().setLayoutY(300);
 //		d.getId().setLayoutX(200);
 //		d.setList(arr);
 //		AP.getChildren().add(d.getId());
-		
+//		tokens.add(d);
 	}
 	@FXML
 	private void displayPosition(MouseEvent event)
@@ -253,6 +252,13 @@ public class GameController implements Initializable
     	Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());
     	window.setScene(s);
     	window.show();
+	}
+	@FXML
+	public void GameOver() throws IOException {
+		Parent root = FXMLLoader.load(getClass().getResource("GameOver.fxml"));
+		Stage window = new Stage();
+        window.setScene(new Scene(root, 335, 600));
+        window.show();
 	}
 	@FXML
 	private void setTransition1()
@@ -385,668 +391,47 @@ public class GameController implements Initializable
 		
 		p1 = new ParallelTransition(sequentialTransition1,sequentialTransition2,sequentialTransition3,sequentialTransition4,sequentialTransition5);
 	}
+
 	@FXML
-	private void setTransition2()
-	{
-		//for button1
-		Path path1= new Path();
-		path1.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo1= new ArcTo();
-		arcTo1.setX(50.0);		//change the following coordinates for different paths
-		arcTo1.setY(50.0);
-		arcTo1.setRadiusX(50.0);		
-		arcTo1.setRadiusY(50.0);
-		path1.getElements().add(arcTo1);
-		
-		//for button2
-		Path path2= new Path();
-		path2.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo2= new ArcTo();
-		arcTo2.setX(50.0);		//change the following coordinates for different paths
-		arcTo2.setY(-50.0);
-		arcTo2.setRadiusX(50.0);		
-		arcTo2.setRadiusY(50.0);
-		path2.getElements().add(arcTo2);
-		
-		//for button3
-		Path path3= new Path();
-		path3.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo3= new ArcTo();
-		arcTo3.setX(-50.0);		//change the following coordinates for different paths
-		arcTo3.setY(50.0);
-		arcTo3.setRadiusX(50.0);		
-		arcTo3.setRadiusY(50.0);
-		path3.getElements().add(arcTo3);
-		
-		//for button4
-		Path path4= new Path();
-		path4.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo4= new ArcTo();
-		arcTo4.setX(-50.0);		//change the following coordinates for different paths
-		arcTo4.setY(-50.0);
-		arcTo4.setRadiusX(50.0);		
-		arcTo4.setRadiusY(50.0);
-		path4.getElements().add(arcTo4);
-		
-		//for button5
-		Path path5= new Path();
-		path5.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo5= new ArcTo();
-		arcTo5.setX(50.0);		//change the following coordinates for different paths
-		arcTo5.setY(50.0);
-		arcTo5.setRadiusX(50.0);		
-		arcTo5.setRadiusY(50.0);
-		path5.getElements().add(arcTo5);
-				
-		PathTransition transition1= new PathTransition();
-		transition1.setNode(c21);		//change the button to circle name from the controller
-		transition1.setPath(path1);
-		transition1.setDuration(Duration.seconds(1));
-		
-		PathTransition transition2= new PathTransition();
-		transition2.setNode(c22);		//change the button to circle name from the controller
-		transition2.setPath(path2);
-		transition2.setDuration(Duration.seconds(1));
-		
-		PathTransition transition3= new PathTransition();
-		transition3.setNode(c23);		//change the button to circle name from the controller
-		transition3.setPath(path3);
-		transition3.setDuration(Duration.seconds(1));
-		
-		PathTransition transition4= new PathTransition();
-		transition4.setNode(c24);		//change the button to circle name from the controller
-		transition4.setPath(path4);
-		transition4.setDuration(Duration.seconds(1));
-				
-		ScaleTransition S_transition1= new ScaleTransition(Duration.seconds(1),c21);
-		S_transition1.setToX(2);
-		S_transition1.setToY(2);
-		
-		ScaleTransition S_transition2= new ScaleTransition(Duration.seconds(1),c22);
-		S_transition2.setToX(2);
-		S_transition2.setToY(2);
-		
-		ScaleTransition S_transition3= new ScaleTransition(Duration.seconds(1),c23);
-		S_transition3.setToX(2);
-		S_transition3.setToY(2);
-		
-		ScaleTransition S_transition4= new ScaleTransition(Duration.seconds(1),c24);
-		S_transition4.setToX(2);
-		S_transition4.setToY(2);
-		
-		ScaleTransition S_transition5= new ScaleTransition(Duration.seconds(1),c25);
-		S_transition5.setToX(2);
-		S_transition5.setToY(2);
-		
-		ParallelTransition pt1= new ParallelTransition(transition1,S_transition1);
-		
-		ParallelTransition pt2= new ParallelTransition(transition2,S_transition2);
-		
-		ParallelTransition pt3= new ParallelTransition(transition3,S_transition3);
-		
-		ParallelTransition pt4= new ParallelTransition(transition4,S_transition4);
-		
-		ParallelTransition pt5= new ParallelTransition(S_transition5);
-		
-		FadeTransition fadeOut1= new FadeTransition(Duration.seconds(1),c21);
-		fadeOut1.setFromValue(1.0);
-		fadeOut1.setToValue(0.0);
-		
-		FadeTransition fadeOut2= new FadeTransition(Duration.seconds(1),c22);
-		fadeOut2.setFromValue(1.0);
-		fadeOut2.setToValue(0.0);
-		
-		FadeTransition fadeOut3= new FadeTransition(Duration.seconds(1),c23);
-		fadeOut3.setFromValue(1.0);
-		fadeOut3.setToValue(0.0);
-		
-		FadeTransition fadeOut4= new FadeTransition(Duration.seconds(1),c24);
-		fadeOut4.setFromValue(1.0);
-		fadeOut4.setToValue(0.0);
-		
-		FadeTransition fadeOut5= new FadeTransition(Duration.seconds(1),c25);
-		fadeOut5.setFromValue(1.0);
-		fadeOut5.setToValue(0.0);
-		
-		SequentialTransition sequentialTransition1 = new SequentialTransition(pt1,fadeOut1);
-		SequentialTransition sequentialTransition2 = new SequentialTransition(pt2,fadeOut2);
-		SequentialTransition sequentialTransition3 = new SequentialTransition(pt3,fadeOut3);
-		SequentialTransition sequentialTransition4 = new SequentialTransition(pt4,fadeOut4);
-		SequentialTransition sequentialTransition5 = new SequentialTransition(pt5,fadeOut5);
-		
-		p2 = new ParallelTransition(sequentialTransition1,sequentialTransition2,sequentialTransition3,sequentialTransition4,sequentialTransition5);
-	}
-	@FXML
-	private void setTransition3()
-	{
-		//for button1
-		Path path1= new Path();
-		path1.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo1= new ArcTo();
-		arcTo1.setX(50.0);		//change the following coordinates for different paths
-		arcTo1.setY(50.0);
-		arcTo1.setRadiusX(50.0);		
-		arcTo1.setRadiusY(50.0);
-		path1.getElements().add(arcTo1);
-		
-		//for button2
-		Path path2= new Path();
-		path2.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo2= new ArcTo();
-		arcTo2.setX(50.0);		//change the following coordinates for different paths
-		arcTo2.setY(-50.0);
-		arcTo2.setRadiusX(50.0);		
-		arcTo2.setRadiusY(50.0);
-		path2.getElements().add(arcTo2);
-		
-		//for button3
-		Path path3= new Path();
-		path3.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo3= new ArcTo();
-		arcTo3.setX(-50.0);		//change the following coordinates for different paths
-		arcTo3.setY(50.0);
-		arcTo3.setRadiusX(50.0);		
-		arcTo3.setRadiusY(50.0);
-		path3.getElements().add(arcTo3);
-		
-		//for button4
-		Path path4= new Path();
-		path4.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo4= new ArcTo();
-		arcTo4.setX(-50.0);		//change the following coordinates for different paths
-		arcTo4.setY(-50.0);
-		arcTo4.setRadiusX(50.0);		
-		arcTo4.setRadiusY(50.0);
-		path4.getElements().add(arcTo4);
-		
-		//for button5
-		Path path5= new Path();
-		path5.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo5= new ArcTo();
-		arcTo5.setX(50.0);		//change the following coordinates for different paths
-		arcTo5.setY(50.0);
-		arcTo5.setRadiusX(50.0);		
-		arcTo5.setRadiusY(50.0);
-		path5.getElements().add(arcTo5);
-				
-		PathTransition transition1= new PathTransition();
-		transition1.setNode(c31);		//change the button to circle name from the controller
-		transition1.setPath(path1);
-		transition1.setDuration(Duration.seconds(1));
-		
-		PathTransition transition2= new PathTransition();
-		transition2.setNode(c32);		//change the button to circle name from the controller
-		transition2.setPath(path2);
-		transition2.setDuration(Duration.seconds(1));
-		
-		PathTransition transition3= new PathTransition();
-		transition3.setNode(c33);		//change the button to circle name from the controller
-		transition3.setPath(path3);
-		transition3.setDuration(Duration.seconds(1));
-		
-		PathTransition transition4= new PathTransition();
-		transition4.setNode(c34);		//change the button to circle name from the controller
-		transition4.setPath(path4);
-		transition4.setDuration(Duration.seconds(1));
-				
-		ScaleTransition S_transition1= new ScaleTransition(Duration.seconds(1),c31);
-		S_transition1.setToX(2);
-		S_transition1.setToY(2);
-		
-		ScaleTransition S_transition2= new ScaleTransition(Duration.seconds(1),c32);
-		S_transition2.setToX(2);
-		S_transition2.setToY(2);
-		
-		ScaleTransition S_transition3= new ScaleTransition(Duration.seconds(1),c33);
-		S_transition3.setToX(2);
-		S_transition3.setToY(2);
-		
-		ScaleTransition S_transition4= new ScaleTransition(Duration.seconds(1),c34);
-		S_transition4.setToX(2);
-		S_transition4.setToY(2);
-		
-		ScaleTransition S_transition5= new ScaleTransition(Duration.seconds(1),c35);
-		S_transition5.setToX(2);
-		S_transition5.setToY(2);
-		
-		ParallelTransition pt1= new ParallelTransition(transition1,S_transition1);
-		
-		ParallelTransition pt2= new ParallelTransition(transition2,S_transition2);
-		
-		ParallelTransition pt3= new ParallelTransition(transition3,S_transition3);
-		
-		ParallelTransition pt4= new ParallelTransition(transition4,S_transition4);
-		
-		ParallelTransition pt5= new ParallelTransition(S_transition5);
-		
-		FadeTransition fadeOut1= new FadeTransition(Duration.seconds(1),c31);
-		fadeOut1.setFromValue(1.0);
-		fadeOut1.setToValue(0.0);
-		
-		FadeTransition fadeOut2= new FadeTransition(Duration.seconds(1),c32);
-		fadeOut2.setFromValue(1.0);
-		fadeOut2.setToValue(0.0);
-		
-		FadeTransition fadeOut3= new FadeTransition(Duration.seconds(1),c33);
-		fadeOut3.setFromValue(1.0);
-		fadeOut3.setToValue(0.0);
-		
-		FadeTransition fadeOut4= new FadeTransition(Duration.seconds(1),c34);
-		fadeOut4.setFromValue(1.0);
-		fadeOut4.setToValue(0.0);
-		
-		FadeTransition fadeOut5= new FadeTransition(Duration.seconds(1),c35);
-		fadeOut5.setFromValue(1.0);
-		fadeOut5.setToValue(0.0);
-		
-		SequentialTransition sequentialTransition1 = new SequentialTransition(pt1,fadeOut1);
-		SequentialTransition sequentialTransition2 = new SequentialTransition(pt2,fadeOut2);
-		SequentialTransition sequentialTransition3 = new SequentialTransition(pt3,fadeOut3);
-		SequentialTransition sequentialTransition4 = new SequentialTransition(pt4,fadeOut4);
-		SequentialTransition sequentialTransition5 = new SequentialTransition(pt5,fadeOut5);
-		
-		p3 = new ParallelTransition(sequentialTransition1,sequentialTransition2,sequentialTransition3,sequentialTransition4,sequentialTransition5);
-	}
-	@FXML
-	private void setTransition4()
-	{
-		//for button1
-		Path path1= new Path();
-		path1.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo1= new ArcTo();
-		arcTo1.setX(50.0);		//change the following coordinates for different paths
-		arcTo1.setY(50.0);
-		arcTo1.setRadiusX(50.0);		
-		arcTo1.setRadiusY(50.0);
-		path1.getElements().add(arcTo1);
-		
-		//for button2
-		Path path2= new Path();
-		path2.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo2= new ArcTo();
-		arcTo2.setX(50.0);		//change the following coordinates for different paths
-		arcTo2.setY(-50.0);
-		arcTo2.setRadiusX(50.0);		
-		arcTo2.setRadiusY(50.0);
-		path2.getElements().add(arcTo2);
-		
-		//for button3
-		Path path3= new Path();
-		path3.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo3= new ArcTo();
-		arcTo3.setX(-50.0);		//change the following coordinates for different paths
-		arcTo3.setY(50.0);
-		arcTo3.setRadiusX(50.0);		
-		arcTo3.setRadiusY(50.0);
-		path3.getElements().add(arcTo3);
-		
-		//for button4
-		Path path4= new Path();
-		path4.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo4= new ArcTo();
-		arcTo4.setX(-50.0);		//change the following coordinates for different paths
-		arcTo4.setY(-50.0);
-		arcTo4.setRadiusX(50.0);		
-		arcTo4.setRadiusY(50.0);
-		path4.getElements().add(arcTo4);
-		
-		//for button5
-		Path path5= new Path();
-		path5.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo5= new ArcTo();
-		arcTo5.setX(50.0);		//change the following coordinates for different paths
-		arcTo5.setY(50.0);
-		arcTo5.setRadiusX(50.0);		
-		arcTo5.setRadiusY(50.0);
-		path5.getElements().add(arcTo5);
-				
-		PathTransition transition1= new PathTransition();
-		transition1.setNode(c41);		//change the button to circle name from the controller
-		transition1.setPath(path1);
-		transition1.setDuration(Duration.seconds(1));
-		
-		PathTransition transition2= new PathTransition();
-		transition2.setNode(c42);		//change the button to circle name from the controller
-		transition2.setPath(path2);
-		transition2.setDuration(Duration.seconds(1));
-		
-		PathTransition transition3= new PathTransition();
-		transition3.setNode(c43);		//change the button to circle name from the controller
-		transition3.setPath(path3);
-		transition3.setDuration(Duration.seconds(1));
-		
-		PathTransition transition4= new PathTransition();
-		transition4.setNode(c44);		//change the button to circle name from the controller
-		transition4.setPath(path4);
-		transition4.setDuration(Duration.seconds(1));
-				
-		ScaleTransition S_transition1= new ScaleTransition(Duration.seconds(1),c41);
-		S_transition1.setToX(2);
-		S_transition1.setToY(2);
-		
-		ScaleTransition S_transition2= new ScaleTransition(Duration.seconds(1),c42);
-		S_transition2.setToX(2);
-		S_transition2.setToY(2);
-		
-		ScaleTransition S_transition3= new ScaleTransition(Duration.seconds(1),c43);
-		S_transition3.setToX(2);
-		S_transition3.setToY(2);
-		
-		ScaleTransition S_transition4= new ScaleTransition(Duration.seconds(1),c44);
-		S_transition4.setToX(2);
-		S_transition4.setToY(2);
-		
-		ScaleTransition S_transition5= new ScaleTransition(Duration.seconds(1),c45);
-		S_transition5.setToX(2);
-		S_transition5.setToY(2);
-		
-		ParallelTransition pt1= new ParallelTransition(transition1,S_transition1);
-		
-		ParallelTransition pt2= new ParallelTransition(transition2,S_transition2);
-		
-		ParallelTransition pt3= new ParallelTransition(transition3,S_transition3);
-		
-		ParallelTransition pt4= new ParallelTransition(transition4,S_transition4);
-		
-		ParallelTransition pt5= new ParallelTransition(S_transition5);
-		
-		FadeTransition fadeOut1= new FadeTransition(Duration.seconds(1),c41);
-		fadeOut1.setFromValue(1.0);
-		fadeOut1.setToValue(0.0);
-		
-		FadeTransition fadeOut2= new FadeTransition(Duration.seconds(1),c42);
-		fadeOut2.setFromValue(1.0);
-		fadeOut2.setToValue(0.0);
-		
-		FadeTransition fadeOut3= new FadeTransition(Duration.seconds(1),c43);
-		fadeOut3.setFromValue(1.0);
-		fadeOut3.setToValue(0.0);
-		
-		FadeTransition fadeOut4= new FadeTransition(Duration.seconds(1),c44);
-		fadeOut4.setFromValue(1.0);
-		fadeOut4.setToValue(0.0);
-		
-		FadeTransition fadeOut5= new FadeTransition(Duration.seconds(1),c45);
-		fadeOut5.setFromValue(1.0);
-		fadeOut5.setToValue(0.0);
-		
-		SequentialTransition sequentialTransition1 = new SequentialTransition(pt1,fadeOut1);
-		SequentialTransition sequentialTransition2 = new SequentialTransition(pt2,fadeOut2);
-		SequentialTransition sequentialTransition3 = new SequentialTransition(pt3,fadeOut3);
-		SequentialTransition sequentialTransition4 = new SequentialTransition(pt4,fadeOut4);
-		SequentialTransition sequentialTransition5 = new SequentialTransition(pt5,fadeOut5);
-		
-		p4 = new ParallelTransition(sequentialTransition1,sequentialTransition2,sequentialTransition3,sequentialTransition4,sequentialTransition5);
-	}
-	@FXML
-	private void setTransition5()
-	{
-		//for button1
-		Path path1= new Path();
-		path1.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo1= new ArcTo();
-		arcTo1.setX(50.0);		//change the following coordinates for different paths
-		arcTo1.setY(50.0);
-		arcTo1.setRadiusX(50.0);		
-		arcTo1.setRadiusY(50.0);
-		path1.getElements().add(arcTo1);
-		
-		//for button2
-		Path path2= new Path();
-		path2.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo2= new ArcTo();
-		arcTo2.setX(50.0);		//change the following coordinates for different paths
-		arcTo2.setY(-50.0);
-		arcTo2.setRadiusX(50.0);		
-		arcTo2.setRadiusY(50.0);
-		path2.getElements().add(arcTo2);
-		
-		//for button3
-		Path path3= new Path();
-		path3.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo3= new ArcTo();
-		arcTo3.setX(-50.0);		//change the following coordinates for different paths
-		arcTo3.setY(50.0);
-		arcTo3.setRadiusX(50.0);		
-		arcTo3.setRadiusY(50.0);
-		path3.getElements().add(arcTo3);
-		
-		//for button4
-		Path path4= new Path();
-		path4.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo4= new ArcTo();
-		arcTo4.setX(-50.0);		//change the following coordinates for different paths
-		arcTo4.setY(-50.0);
-		arcTo4.setRadiusX(50.0);		
-		arcTo4.setRadiusY(50.0);
-		path4.getElements().add(arcTo4);
-		
-		//for button5
-		Path path5= new Path();
-		path5.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo5= new ArcTo();
-		arcTo5.setX(50.0);		//change the following coordinates for different paths
-		arcTo5.setY(50.0);
-		arcTo5.setRadiusX(50.0);		
-		arcTo5.setRadiusY(50.0);
-		path5.getElements().add(arcTo5);
-				
-		PathTransition transition1= new PathTransition();
-		transition1.setNode(c51);		//change the button to circle name from the controller
-		transition1.setPath(path1);
-		transition1.setDuration(Duration.seconds(1));
-		
-		PathTransition transition2= new PathTransition();
-		transition2.setNode(c52);		//change the button to circle name from the controller
-		transition2.setPath(path2);
-		transition2.setDuration(Duration.seconds(1));
-		
-		PathTransition transition3= new PathTransition();
-		transition3.setNode(c53);		//change the button to circle name from the controller
-		transition3.setPath(path3);
-		transition3.setDuration(Duration.seconds(1));
-		
-		PathTransition transition4= new PathTransition();
-		transition4.setNode(c54);		//change the button to circle name from the controller
-		transition4.setPath(path4);
-		transition4.setDuration(Duration.seconds(1));
-				
-		ScaleTransition S_transition1= new ScaleTransition(Duration.seconds(1),c51);
-		S_transition1.setToX(2);
-		S_transition1.setToY(2);
-		
-		ScaleTransition S_transition2= new ScaleTransition(Duration.seconds(1),c52);
-		S_transition2.setToX(2);
-		S_transition2.setToY(2);
-		
-		ScaleTransition S_transition3= new ScaleTransition(Duration.seconds(1),c53);
-		S_transition3.setToX(2);
-		S_transition3.setToY(2);
-		
-		ScaleTransition S_transition4= new ScaleTransition(Duration.seconds(1),c54);
-		S_transition4.setToX(2);
-		S_transition4.setToY(2);
-		
-		ScaleTransition S_transition5= new ScaleTransition(Duration.seconds(1),c55);
-		S_transition5.setToX(2);
-		S_transition5.setToY(2);
-		
-		ParallelTransition pt1= new ParallelTransition(transition1,S_transition1);
-		
-		ParallelTransition pt2= new ParallelTransition(transition2,S_transition2);
-		
-		ParallelTransition pt3= new ParallelTransition(transition3,S_transition3);
-		
-		ParallelTransition pt4= new ParallelTransition(transition4,S_transition4);
-		
-		ParallelTransition pt5= new ParallelTransition(S_transition5);
-		
-		FadeTransition fadeOut1= new FadeTransition(Duration.seconds(1),c51);
-		fadeOut1.setFromValue(1.0);
-		fadeOut1.setToValue(0.0);
-		
-		FadeTransition fadeOut2= new FadeTransition(Duration.seconds(1),c52);
-		fadeOut2.setFromValue(1.0);
-		fadeOut2.setToValue(0.0);
-		
-		FadeTransition fadeOut3= new FadeTransition(Duration.seconds(1),c53);
-		fadeOut3.setFromValue(1.0);
-		fadeOut3.setToValue(0.0);
-		
-		FadeTransition fadeOut4= new FadeTransition(Duration.seconds(1),c54);
-		fadeOut4.setFromValue(1.0);
-		fadeOut4.setToValue(0.0);
-		
-		FadeTransition fadeOut5= new FadeTransition(Duration.seconds(1),c55);
-		fadeOut5.setFromValue(1.0);
-		fadeOut5.setToValue(0.0);
-		
-		SequentialTransition sequentialTransition1 = new SequentialTransition(pt1,fadeOut1);
-		SequentialTransition sequentialTransition2 = new SequentialTransition(pt2,fadeOut2);
-		SequentialTransition sequentialTransition3 = new SequentialTransition(pt3,fadeOut3);
-		SequentialTransition sequentialTransition4 = new SequentialTransition(pt4,fadeOut4);
-		SequentialTransition sequentialTransition5 = new SequentialTransition(pt5,fadeOut5);
-		
-		p5 = new ParallelTransition(sequentialTransition1,sequentialTransition2,sequentialTransition3,sequentialTransition4,sequentialTransition5);
-	}
-	@FXML
-	private void setTransition6()
-	{
-		//for button1
-		Path path1= new Path();
-		path1.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo1= new ArcTo();
-		arcTo1.setX(50.0);		//change the following coordinates for different paths
-		arcTo1.setY(50.0);
-		arcTo1.setRadiusX(50.0);		
-		arcTo1.setRadiusY(50.0);
-		path1.getElements().add(arcTo1);
-		
-		//for button2
-		Path path2= new Path();
-		path2.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo2= new ArcTo();
-		arcTo2.setX(50.0);		//change the following coordinates for different paths
-		arcTo2.setY(-50.0);
-		arcTo2.setRadiusX(50.0);		
-		arcTo2.setRadiusY(50.0);
-		path2.getElements().add(arcTo2);
-		
-		//for button3
-		Path path3= new Path();
-		path3.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo3= new ArcTo();
-		arcTo3.setX(-50.0);		//change the following coordinates for different paths
-		arcTo3.setY(50.0);
-		arcTo3.setRadiusX(50.0);		
-		arcTo3.setRadiusY(50.0);
-		path3.getElements().add(arcTo3);
-		
-		//for button4
-		Path path4= new Path();
-		path4.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo4= new ArcTo();
-		arcTo4.setX(-50.0);		//change the following coordinates for different paths
-		arcTo4.setY(-50.0);
-		arcTo4.setRadiusX(50.0);		
-		arcTo4.setRadiusY(50.0);
-		path4.getElements().add(arcTo4);
-		
-		//for button5
-		Path path5= new Path();
-		path5.getElements().add(new MoveTo(0,0));
-		ArcTo arcTo5= new ArcTo();
-		arcTo5.setX(50.0);		//change the following coordinates for different paths
-		arcTo5.setY(50.0);
-		arcTo5.setRadiusX(50.0);		
-		arcTo5.setRadiusY(50.0);
-		path5.getElements().add(arcTo5);
-				
-		PathTransition transition1= new PathTransition();
-		transition1.setNode(c61);		//change the button to circle name from the controller
-		transition1.setPath(path1);
-		transition1.setDuration(Duration.seconds(1));
-		
-		PathTransition transition2= new PathTransition();
-		transition2.setNode(c62);		//change the button to circle name from the controller
-		transition2.setPath(path2);
-		transition2.setDuration(Duration.seconds(1));
-		
-		PathTransition transition3= new PathTransition();
-		transition3.setNode(c63);		//change the button to circle name from the controller
-		transition3.setPath(path3);
-		transition3.setDuration(Duration.seconds(1));
-		
-		PathTransition transition4= new PathTransition();
-		transition4.setNode(c64);		//change the button to circle name from the controller
-		transition4.setPath(path4);
-		transition4.setDuration(Duration.seconds(1));
-				
-		ScaleTransition S_transition1= new ScaleTransition(Duration.seconds(1),c61);
-		S_transition1.setToX(2);
-		S_transition1.setToY(2);
-		
-		ScaleTransition S_transition2= new ScaleTransition(Duration.seconds(1),c62);
-		S_transition2.setToX(2);
-		S_transition2.setToY(2);
-		
-		ScaleTransition S_transition3= new ScaleTransition(Duration.seconds(1),c63);
-		S_transition3.setToX(2);
-		S_transition3.setToY(2);
-		
-		ScaleTransition S_transition4= new ScaleTransition(Duration.seconds(1),c64);
-		S_transition4.setToX(2);
-		S_transition4.setToY(2);
-		
-		ScaleTransition S_transition5= new ScaleTransition(Duration.seconds(1),c65);
-		S_transition5.setToX(2);
-		S_transition5.setToY(2);
-		
-		ParallelTransition pt1= new ParallelTransition(transition1,S_transition1);
-		
-		ParallelTransition pt2= new ParallelTransition(transition2,S_transition2);
-		
-		ParallelTransition pt3= new ParallelTransition(transition3,S_transition3);
-		
-		ParallelTransition pt4= new ParallelTransition(transition4,S_transition4);
-		
-		ParallelTransition pt5= new ParallelTransition(S_transition5);
-		
-		FadeTransition fadeOut1= new FadeTransition(Duration.seconds(1),c61);
-		fadeOut1.setFromValue(1.0);
-		fadeOut1.setToValue(0.0);
-		
-		FadeTransition fadeOut2= new FadeTransition(Duration.seconds(1),c62);
-		fadeOut2.setFromValue(1.0);
-		fadeOut2.setToValue(0.0);
-		
-		FadeTransition fadeOut3= new FadeTransition(Duration.seconds(1),c63);
-		fadeOut3.setFromValue(1.0);
-		fadeOut3.setToValue(0.0);
-		
-		FadeTransition fadeOut4= new FadeTransition(Duration.seconds(1),c64);
-		fadeOut4.setFromValue(1.0);
-		fadeOut4.setToValue(0.0);
-		
-		FadeTransition fadeOut5= new FadeTransition(Duration.seconds(1),c65);
-		fadeOut5.setFromValue(1.0);
-		fadeOut5.setToValue(0.0);
-		
-		SequentialTransition sequentialTransition1 = new SequentialTransition(pt1,fadeOut1);
-		SequentialTransition sequentialTransition2 = new SequentialTransition(pt2,fadeOut2);
-		SequentialTransition sequentialTransition3 = new SequentialTransition(pt3,fadeOut3);
-		SequentialTransition sequentialTransition4 = new SequentialTransition(pt4,fadeOut4);
-		SequentialTransition sequentialTransition5 = new SequentialTransition(pt5,fadeOut5);
-		
-		p6 = new ParallelTransition(sequentialTransition1,sequentialTransition2,sequentialTransition3,sequentialTransition4,sequentialTransition5);
-	}
-	@FXML
-	void onHit() {
-//		if(flag1==0 && game.getSnake().getId().getBoundsInParent().intersects(d.getId().getBoundsInParent()))
-//		{
-//			d.Hit(game.getSnake(),AP);
-//			flag1 = 1;
-//		}
+	void onHit() throws IOException {
+		for(int i=0;i<tokens.size();i++)
+		{
+			Token token = tokens.get(i);
+			if(game.getSnake().getId().getBoundsInParent().intersects(token.getId().getBoundsInParent()))
+			{
+				if(token.getClass().equals(ChainOfBlocks.class))
+				{
+					ChainOfBlocks c = (ChainOfBlocks) token;
+					if(ShieldFlag==1)
+					{
+						c.HitWithShield(game.getSnake(), AP);
+					}
+					else
+					{
+						c.Hit(game.getSnake(), AP);
+					}
+					tokens.remove(token);
+					System.out.println(token.getClass());
+					GameOverFlag = c.getGameOverFlag();
+					if(GameOverFlag==1)
+					{
+						GameOver();
+					}
+				}
+				if(token.getClass().equals(Shield.class))
+				{
+					ShieldFlag = 1;
+				}
+				tokens.remove(token);
+				token.Hit(game.getSnake(), AP);
+				System.out.println(token.getClass());
+			}
+		}
+		/*if(flag1==0 && game.getSnake().getId().getBoundsInParent().intersects(d.getId().getBoundsInParent()))
+		{
+			d.Hit(game.getSnake(),AP);
+			flag1 = 1;
+		}
 		if(flag2==0 && game.getSnake().getId().getBoundsInParent().intersects(s.getId().getBoundsInParent()))
 		{
 			s.Hit(game.getSnake(),AP);
@@ -1107,7 +492,7 @@ public class GameController implements Initializable
 				AP.getChildren().remove(g6);
 			});
 			AP.getChildren().remove(b6);
-		}
+		}*/
 	}
 	@FXML
 	void moveLeft() 
