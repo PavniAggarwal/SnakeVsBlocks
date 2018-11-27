@@ -60,56 +60,6 @@ public class GameController implements Initializable
 	@FXML
 	private Circle c15;
 	@FXML
-	private Circle c21;
-	@FXML
-	private Circle c22;
-	@FXML
-	private Circle c23;
-	@FXML
-	private Circle c24;
-	@FXML
-	private Circle c25;
-	@FXML
-	private Circle c31;
-	@FXML
-	private Circle c32;
-	@FXML
-	private Circle c33;
-	@FXML
-	private Circle c34;
-	@FXML
-	private Circle c35;
-	@FXML
-	private Circle c41;
-	@FXML
-	private Circle c42;
-	@FXML
-	private Circle c43;
-	@FXML
-	private Circle c44;
-	@FXML
-	private Circle c45;
-	@FXML
-	private Circle c51;
-	@FXML
-	private Circle c52;
-	@FXML
-	private Circle c53;
-	@FXML
-	private Circle c54;
-	@FXML
-	private Circle c55;
-	@FXML
-	private Circle c61;
-	@FXML
-	private Circle c62;
-	@FXML
-	private Circle c63;
-	@FXML
-	private Circle c64;
-	@FXML
-	private Circle c65;
-	@FXML
 	private AnchorPane AP;
 	@FXML
 	private AnchorPane AP2;
@@ -117,33 +67,8 @@ public class GameController implements Initializable
 	private Group g1;
 	@FXML
 	private Group b1;
-	@FXML
-	private Group g2;
-	@FXML
-	private Group b2;
-	@FXML
-	private Group g3;
-	@FXML
-	private Group b3;
-	@FXML
-	private Group g4;
-	@FXML
-	private Group b4;
-	@FXML
-	private Group g5;
-	@FXML
-	private Group b5;
-	@FXML
-	private Group g6;
-	@FXML
-	private Group b6;
 	Vec2d location;
 	ParallelTransition p1;
-	ParallelTransition p2;
-	ParallelTransition p3;
-	ParallelTransition p4;
-	ParallelTransition p5;
-	ParallelTransition p6;
 	PathTransition transition;
 	Boolean transitionIsPlay;
 	Ball ball;
@@ -178,8 +103,9 @@ public class GameController implements Initializable
 		transition.setPath(path);
 		transition.play();
 		transitionIsPlay = true;
+		snk.setTransition(transition);
 		Timeline timeline = new Timeline(new KeyFrame(
-				Duration.millis(50),
+				Duration.millis(5),
 				ae-> {
 					try {
 						onHit();
@@ -256,7 +182,7 @@ public class GameController implements Initializable
 	@FXML
 	public void GameOver() throws IOException {
 		Parent root = FXMLLoader.load(getClass().getResource("GameOver.fxml"));
-		Stage window = new Stage();
+		Stage window = (Stage) AP.getScene().getWindow();
         window.setScene(new Scene(root, 335, 600));
         window.show();
 	}
