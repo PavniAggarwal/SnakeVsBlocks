@@ -263,7 +263,7 @@ public class Block {
 			}
 			else
 			{
-				//gameover
+				//game over
 			}
 		}
 	}
