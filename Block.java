@@ -7,12 +7,15 @@ import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PathTransition;
-import javafx.animation.PauseTransition;
 import javafx.animation.ScaleTransition;
 import javafx.animation.SequentialTransition;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.Circle;
@@ -20,6 +23,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Block {
@@ -33,8 +37,8 @@ public class Block {
 	ParallelTransition p;
 	private int value;
 	
-	Block(int v, Group b) {
-		block = b;
+	Block(int v) {
+		block = new Group();
 		animate = new Group();
 		Circle c1 = new Circle(7);
 		c1 = createAnimation(c1);
@@ -225,14 +229,17 @@ public class Block {
 		
 		p = new ParallelTransition(sequentialTransition1,sequentialTransition2,sequentialTransition3,sequentialTransition4,sequentialTransition5);
 	}
-	public void Hit(Snake s) {		
+	public void Hit(Snake s,AnchorPane AP) {		
 		if(value<=5)
 		{
 			if(s.getLength()>=value)
 			{
 				p.play();
-				block.getChildren().remove(2);
-				block.getChildren().remove(1);
+				try {
+					block.getChildren().remove(2);
+					block.getChildren().remove(1);
+					}
+				catch(IndexOutOfBoundsException e) {}
 				p.setOnFinished((e) ->{
 				block.getChildren().remove(0);
 				});
@@ -241,36 +248,80 @@ public class Block {
 			}
 			else
 			{
-				//gameover
+				Parent root;
+				try {
+					root = FXMLLoader.load(getClass().getResource("GameOver.fxml"));
+					Stage window = (Stage) AP.getScene().getWindow();
+			        window.setScene(new Scene(root, 335, 600));
+			        window.show();
+				} catch (IOException e) {
+				}
+				catch(NullPointerException e) {}
 			}
 		}
 		else
 		{
+			int flag=0;
+			if(s.getLength()<value)
+			{
+				flag = 1;
+			}
+			final int f = flag;
 			s.getTransition().pause();
 			for(int i=0;i<value;i++)
 			{
-				if(s.getLength()>0 && value>0)
+				if(s.getLength()>0)
 				{
-					s.DecLength(1);
-					value = value - 1;
-					tb.setText(String.valueOf(value));
-					s.setScore(s.getScore()+1);
+					Timeline t = new Timeline();
+					t.getKeyFrames().addAll(
+					    new KeyFrame(Duration.seconds(i), actionEvent -> {
+					    	for(int j=0;j<value;j++)
+					    	{
+					    		s.DecLength(1);
+					    		value--;
+								tb.setText(String.valueOf(value));
+								s.setScore(s.getScore()+1);
+					    	}	    	
+					    	}
+					    ),
+					    new KeyFrame(Duration.seconds(0.5), actionEvent -> {
+					    	if(f==0)
+							{
+					    		//s.getId().setLayoutY(s.getId().getLayoutY()-5);
+								p.play();
+								System.out.println();
+								try {
+								block.getChildren().remove(2);
+								block.getChildren().remove(1);
+								}
+								catch(IndexOutOfBoundsException e) {}
+								p.setOnFinished((e) ->{
+								block.getChildren().remove(0);
+								});
+							}
+							else
+							{
+								Parent root;
+								try {
+									root = FXMLLoader.load(getClass().getResource("GameOver.fxml"));
+									Stage window = (Stage) AP.getScene().getWindow();
+							        window.setScene(new Scene(root, 335, 600));
+							        window.show();
+								} catch (IOException e) {
+								}
+								catch (NullPointerException e) {}
+							}
+					    })				    
+					    //new KeyFrame(Duration.seconds(3), actionEvent -> System.out.println("4"))
+					);
+					t.playFromStart();
+					t.getKeyFrames().add(new KeyFrame(Duration.seconds(1), actionEvent ->{
+						s.getTransition().play();
+					}
+					));
+					t.play();
 				}
 		    }
-			//s.getTransition().play();
-			if(value==0)
-			{
-				p.play();
-				block.getChildren().remove(2);
-				block.getChildren().remove(1);
-				p.setOnFinished((e) ->{
-				block.getChildren().remove(0);
-				});
-			}
-			else
-			{
-				//game over
-			}
 		}
 	}
 	public void Destroy(Snake s) {
