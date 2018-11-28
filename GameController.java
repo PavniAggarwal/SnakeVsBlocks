@@ -239,7 +239,7 @@ public class Block {
 				try {
 					block.getChildren().remove(2);
 					block.getChildren().remove(1);
-				}
+					}
 				catch(IndexOutOfBoundsException e) {}
 				p.setOnFinished((e) ->{
 				block.getChildren().remove(0);
@@ -257,7 +257,7 @@ public class Block {
 			        window.show();
 				} catch (IOException e) {
 				}
-				catch (NullPointerException e) {}
+				catch(NullPointerException e) {}
 			}
 		}
 		else
@@ -269,20 +269,23 @@ public class Block {
 			}
 			final int f = flag;
 			s.getTransition().pause();
-			Timeline t = new Timeline();
 			for(int i=0;i<value;i++)
 			{
-				if(s.getLength()>0 && value>0)
-				{					
-					t.getKeyFrames().add(new KeyFrame(Duration.seconds(i), actionEvent -> {
-					    	s.DecLength(1);
-					    	value--;
-							tb.setText(String.valueOf(value));
-							s.setScore(s.getScore()+1);
-					    }	    	
-					    ));
+				if(s.getLength()>0)
+				{
+					Timeline t = new Timeline();
 					t.getKeyFrames().addAll(
-					    new KeyFrame(Duration.seconds(0), actionEvent -> {
+					    new KeyFrame(Duration.seconds(i), actionEvent -> {
+					    	for(int j=0;j<value;j++)
+					    	{
+					    		s.DecLength(1);
+					    		value--;
+								tb.setText(String.valueOf(value));
+								s.setScore(s.getScore()+1);
+					    	}	    	
+					    	}
+					    ),
+					    new KeyFrame(Duration.seconds(0.5), actionEvent -> {
 					    	if(f==0)
 							{
 								p.play();
@@ -308,15 +311,13 @@ public class Block {
 								}
 								catch (NullPointerException e) {}
 							}
-					    })
-					    
+					    }),
+					    new KeyFrame(Duration.seconds(0.75), actionEvent ->s.getTransition().play()
 					    //new KeyFrame(Duration.seconds(3), actionEvent -> System.out.println("4"))
-					);
+					));
+					t.playFromStart();
 				}
 		    }
-			t.play();
-			t.getKeyFrames().add(new KeyFrame(Duration.seconds(4), actionEvent ->s.getTransition().play()));
-			t.play();
 		}
 	}
 	public void Destroy(Snake s) {
