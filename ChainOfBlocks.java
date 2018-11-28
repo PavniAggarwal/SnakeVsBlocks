@@ -23,8 +23,7 @@ public class ChainOfBlocks extends Token{
 		{
 			Random rand = new Random();
 			int v = rand.nextInt(20) + 1;
-			Group b = new Group();
-			Block block = new Block(v,b);
+			Block block = new Block(v);
 			int flag = 0;
 			int n=0;
 			while(flag==0)
@@ -40,8 +39,7 @@ public class ChainOfBlocks extends Token{
 			ID.getChildren().add(block.getId());
 			chain.add(block);
 		}
-		Group b = new Group();
-		Block block = new Block(length - 1,b);
+		Block block = new Block(length - 1);
 		int flag = 0;
 		int n=0;
 		while(flag==0)
@@ -67,11 +65,11 @@ public class ChainOfBlocks extends Token{
 	public void Hit(Snake s,AnchorPane AP) {
 		for(int i=0;i<lengthOfChain;i++)
 		{
-			if(s.getId().getLayoutX()+8>=chain.get(i).getId().getLayoutX() && s.getId().getLayoutX()-8<=chain.get(i).getId().getLayoutX()+45)
+			if(s.getId().getLayoutX()>=chain.get(i).getId().getLayoutX() && s.getId().getLayoutX()<=chain.get(i).getId().getLayoutX()+45)
 			{
 				if(s.getLength()>=chain.get(i).getValue())
 				{
-					chain.get(i).Hit(s);
+					chain.get(i).Hit(s,AP);
 					ParallelTransition p= chain.get(i).getAnimation();
 					final int j = i;
 					p.setOnFinished((e) ->{
@@ -84,7 +82,7 @@ public class ChainOfBlocks extends Token{
 				else
 				{
 					GameOverFlag = 1;
-					chain.get(i).Hit(s);
+					chain.get(i).Hit(s,AP);
 				}
 			}
 		}
