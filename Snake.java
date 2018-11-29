@@ -17,7 +17,8 @@ public class Snake {
 	private int length;
 	private int score;
 	private Transition transition;
-	Snake(Text t) {
+	Snake(Text t) 
+	{
 		length = 10;
 		score = 0;
 		snake = new Group();
@@ -42,6 +43,43 @@ public class Snake {
 		}
 		ScoreBox = t;
 	}
+	Snake(int length,int score,double x,double y)
+	{
+		setScore(score);
+		this.length = length;
+		this.score = score;
+		snake.setLayoutX(x);
+		snake.setLayoutY(y);
+		snake = new Group();
+		LengthBox = new Text();
+		LengthBox.setFill(Color.WHITE);
+		LengthBox.setLayoutX(-3.0);
+		LengthBox.setLayoutY(-10.0);
+		LengthBox.setStrokeWidth(0.0);
+		LengthBox.setText(String.valueOf(this.length));
+		snake.getChildren().add(LengthBox);
+		Circle c = new Circle(8);
+		c.setFill(Color.valueOf("#f4eb37"));
+		c.setStroke(Color.BLACK);
+		snake.getChildren().add(c);
+		for(int i=0;i<this.length;i++)
+		{
+			Circle c1 = new Circle(8);
+			c1.setFill(Color.valueOf("#f4eb37"));
+			c1.setStroke(Color.BLACK);
+			c1.setLayoutY((i+1)*15); 
+			snake.getChildren().add(c1);
+		}
+	}
+	
+	public double getX()
+	{
+		return snake.getLayoutX();
+	}
+	public double getY()
+	{
+		return snake.getLayoutY();
+	}
 	public void setLength(int l) {
 		length = l-1;
 	}
@@ -50,7 +88,7 @@ public class Snake {
 	}
 	public void setScore(int s) {
 		score = s;
-		ScoreBox.setText(String.valueOf(score));
+		ScoreBox.setText("Score: " +String.valueOf(score));
 	}
 	public int getScore() {
 		return score;

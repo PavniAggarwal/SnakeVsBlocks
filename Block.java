@@ -36,6 +36,7 @@ public class Block {
 	private Text tb;
 	ParallelTransition p;
 	private int value;
+	private Color color;
 	
 	Block(int v) {
 		block = new Group();
@@ -67,6 +68,7 @@ public class Block {
 		Random rand = new Random();
 		int n = rand.nextInt(7);
 		rect.setFill(Colors[n]);
+		color=Colors[n];
 		block.getChildren().add(rect);
 		tb = new Text();
 		if(v<10)
@@ -84,6 +86,57 @@ public class Block {
 		block.getChildren().add(tb);
 		value = v;
 		setTransition();
+	}
+	public Block(int v,Color c)
+	{
+		block = new Group();
+		animate = new Group();
+		Circle c1 = new Circle(7);
+		c1 = createAnimation(c1);
+		Circle c2 = new Circle(7);
+		c2 = createAnimation(c2);
+		Circle c3 = new Circle(7);
+		c3 = createAnimation(c3);
+		Circle c4 = new Circle(7);
+		c4 = createAnimation(c4);
+		Circle c5 = new Circle(7);
+		c5 = createAnimation(c5);
+		animate.getChildren().add(c1);
+		animate.getChildren().add(c2);
+		animate.getChildren().add(c3);
+		animate.getChildren().add(c4);
+		animate.getChildren().add(c5);
+		animate.setLayoutX(19.5);
+		animate.setLayoutY(10.0);
+		block.getChildren().add(animate);
+		Rectangle rect = new Rectangle();
+		rect.setHeight(45.0);
+		rect.setWidth(45.0);
+		rect.setArcHeight(5.0);
+		rect.setArcWidth(5.0);
+		rect.setStroke(Color.BLACK);
+		rect.setFill(c);
+		block.getChildren().add(rect);
+		tb = new Text();
+		if(v<10)
+		{
+			tb.setLayoutX(17.0);
+		}
+		else
+		{
+			tb.setLayoutX(11.0);
+		}
+		tb.setLayoutY(30.0);
+		tb.setStrokeWidth(0.0);
+		tb.setStyle("-fx-font-size: 20;");
+		tb.setText(String.valueOf(v));
+		block.getChildren().add(tb);
+		value = v;
+		setTransition();
+	}
+	public Color getColor()
+	{
+		return color;
 	}
 	public Circle createAnimation(Circle c) {
 		c.setFill(Color.valueOf("#f44d4d"));

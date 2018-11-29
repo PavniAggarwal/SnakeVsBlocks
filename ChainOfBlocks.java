@@ -37,7 +37,8 @@ public class ChainOfBlocks extends Token{
 				}
 			}
 			ID.getChildren().add(block.getId());
-			chain.add(block);
+			chain.add(n,block);
+			//chain.add(block);
 		}
 		Block block = new Block(length - 1);
 		int flag = 0;
@@ -54,10 +55,42 @@ public class ChainOfBlocks extends Token{
 			}
 		}
 		ID.getChildren().add(block.getId());
-		chain.add(block);
+		chain.add(n,block);
+		//chain.add(block);
+	}
+	public ChainOfBlocks(int l,ArrayList<Block> a,double x,double y)
+	{
+		ID = new Group();
+		lengthOfChain = l;
+		chain=a;
+		ID.setLayoutX(x);
+		ID.setLayoutY(y);
+		for(int i=0;i<lengthOfChain;i++)
+		{
+			if(a.get(i)!=null)
+			{
+				ID.getChildren().add(a.get(i).getId());
+			}
+		}
+	}
+	public double getX()
+	{
+		return ID.getLayoutX();
+	}
+	public double getY()
+	{
+		return ID.getLayoutY();
 	}
 	public Group getId() {
 		return ID;
+	}
+	public ArrayList<Block> getChain()
+	{
+		return chain;
+	}
+	public int getLength()
+	{
+		return lengthOfChain;
 	}
 	public int getGameOverFlag() {
 		return GameOverFlag;

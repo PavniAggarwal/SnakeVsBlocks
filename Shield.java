@@ -8,10 +8,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
-public class Shield extends Token{
+public class Shield extends Token
+{
 	@FXML
 	private ImageView shield;
-	Shield() throws FileNotFoundException {
+	Shield() throws FileNotFoundException 
+	{
 		FileInputStream input = new FileInputStream("C:\\Users\\PAVNI\\eclipse-workspace\\SnakeVsBlock\\src\\application\\Shield.jpg");
 		Image pic = new Image(input);
 		shield = new ImageView();
@@ -19,13 +21,37 @@ public class Shield extends Token{
 		shield.setFitHeight(25.0);
 		shield.setFitWidth(25.0);
 	}
-	public ImageView getId() {
+	Shield(double x, double y) throws FileNotFoundException 
+	{
+		FileInputStream input = new FileInputStream("C:\\Users\\PAVNI\\eclipse-workspace\\SnakeVsBlock\\src\\application\\Shield.jpg");
+		Image pic = new Image(input);
+		shield = new ImageView();
+		shield.setImage(pic);
+		shield.setFitHeight(25.0);
+		shield.setFitWidth(25.0);
+		shield.setLayoutX(x);
+		shield.setLayoutY(y);
+		
+	}
+	
+	public double getX()
+	{
+		return shield.getLayoutX();
+	}
+	public double getY()
+	{
+		return shield.getLayoutY();
+	}
+	public ImageView getId() 
+	{
 		return shield;
 	}
-	public int setFlag() {
+	public int setFlag() 
+	{
 		return 1;
 	}
-	public void Hit(Snake s,AnchorPane AP) {
+	public void Hit(Snake s,AnchorPane AP) 
+	{
 		
 	}
 }

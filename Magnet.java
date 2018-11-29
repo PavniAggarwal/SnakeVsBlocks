@@ -13,13 +13,34 @@ public class Magnet extends Token{
 	@FXML
 	private ImageView magnet;
 	private ArrayList<Ball> list = new ArrayList<Ball>();
-	Magnet() throws FileNotFoundException {
+	Magnet() throws FileNotFoundException 
+	{
 		FileInputStream input = new FileInputStream("C:\\Users\\PAVNI\\eclipse-workspace\\SnakeVsBlock\\src\\application\\Magnet.jpg");
 		Image pic = new Image(input);
 		magnet = new ImageView();
 		magnet.setImage(pic);
 		magnet.setFitHeight(25.0);
 		magnet.setFitWidth(25.0);
+	}
+	Magnet(double x,double y) throws FileNotFoundException 
+	{
+		FileInputStream input = new FileInputStream("C:\\Users\\PAVNI\\eclipse-workspace\\SnakeVsBlock\\src\\application\\Magnet.jpg");
+		Image pic = new Image(input);
+		magnet = new ImageView();
+		magnet.setImage(pic);
+		magnet.setFitHeight(25.0);
+		magnet.setFitWidth(25.0);
+		magnet.setLayoutX(x);
+		magnet.setLayoutY(y);
+	}
+	
+	public double getX()
+	{
+		return magnet.getLayoutX();
+	}
+	public double getY()
+	{
+		return magnet.getLayoutY();
 	}
 	public ImageView getId() {
 		return magnet;
