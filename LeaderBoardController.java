@@ -42,8 +42,8 @@ public class LeaderBoardController implements Initializable
 		ColScore.setCellValueFactory(new PropertyValueFactory<Player,String>("score"));
 		
 		TableLeaderBoard.setItems(getData());
+		
 	}
-	
 	private ObservableList<Player> getData()
 	{
 		ObservableList<Player> players= FXCollections.observableArrayList();

@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class ChainOfBlocksLoader implements Serializable
 {
 	
-	private ArrayList<BlockLoader> chainofBL;
+	private ArrayList<BlockLoader> chainofBL=new ArrayList<BlockLoader>();
 	private int length;
 	
 	private double x;
@@ -52,17 +52,16 @@ public class ChainOfBlocksLoader implements Serializable
 		setY(cob.getY());
 		for(int i=0;i<chain.size();i++)
 		{
-			if(chain.get(i)!=null)
-			{
+			Block b= chain.get(i);
+			//if(b!=null)
+			//{
 				BlockLoader temp=new BlockLoader();
-				temp.setValue(chain.get(i).getValue());
-				temp.setColor(chain.get(i).getColor());
-				chainofBL.set(i,temp);
-			}
-			else
-			{
-				chainofBL.set(i,null);
-			}
+				temp.setValue(b.getValue());
+				temp.setColor(b.getColor());
+				temp.setX(b.getId().getLayoutX());
+				temp.setY(b.getId().getLayoutY());
+				chainofBL.add(temp);
+			//}
 			
 		}
 	}
@@ -72,15 +71,9 @@ public class ChainOfBlocksLoader implements Serializable
 		ArrayList<BlockLoader> temp=getChainofBL();
 		for(int i=0;i<temp.size();i++)
 		{
-			if(temp.get(i)!=null)
-			{
-				Block b= new Block(temp.get(i).getValue(),temp.get(i).getColor());
-				a.set(i,b);
-			}
-			else
-			{
-				a.set(i,null);
-			}
+			BlockLoader bl=temp.get(i);
+			Block b= new Block(bl.getValue(),bl.getColor(),bl.getX(),bl.getY());
+			a.add(b);
 		}
 		return  new ChainOfBlocks(getLength(),a,getX(),getY());
 	}

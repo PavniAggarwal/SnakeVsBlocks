@@ -35,6 +35,7 @@ public class DestroyBlock extends Token
 		db.setLayoutY(y);
 	}
 	
+	
 	public double getX()
 	{
 		return db.getLayoutX();

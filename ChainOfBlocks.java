@@ -37,8 +37,8 @@ public class ChainOfBlocks extends Token{
 				}
 			}
 			ID.getChildren().add(block.getId());
-			chain.add(n,block);
-			//chain.add(block);
+			chain.add(block);
+			
 		}
 		Block block = new Block(length - 1);
 		int flag = 0;
@@ -55,8 +55,7 @@ public class ChainOfBlocks extends Token{
 			}
 		}
 		ID.getChildren().add(block.getId());
-		chain.add(n,block);
-		//chain.add(block);
+		chain.add(block);
 	}
 	public ChainOfBlocks(int l,ArrayList<Block> a,double x,double y)
 	{
@@ -67,10 +66,9 @@ public class ChainOfBlocks extends Token{
 		ID.setLayoutY(y);
 		for(int i=0;i<lengthOfChain;i++)
 		{
-			if(a.get(i)!=null)
-			{
-				ID.getChildren().add(a.get(i).getId());
-			}
+			Block b=a.get(i);
+			b.getId().setLayoutX(XCoordinates[i]);
+			ID.getChildren().add(b.getId());
 		}
 	}
 	public double getX()

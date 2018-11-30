@@ -87,9 +87,11 @@ public class Block {
 		value = v;
 		setTransition();
 	}
-	public Block(int v,Color c)
+	public Block(int v,String c,double x,double y)
 	{
 		block = new Group();
+		block.setLayoutX(x);
+		block.setLayoutY(y);
 		animate = new Group();
 		Circle c1 = new Circle(7);
 		c1 = createAnimation(c1);
@@ -115,7 +117,7 @@ public class Block {
 		rect.setArcHeight(5.0);
 		rect.setArcWidth(5.0);
 		rect.setStroke(Color.BLACK);
-		rect.setFill(c);
+		rect.setFill(Color.valueOf(c));
 		block.getChildren().add(rect);
 		tb = new Text();
 		if(v<10)
@@ -134,9 +136,9 @@ public class Block {
 		value = v;
 		setTransition();
 	}
-	public Color getColor()
+	public String getColor()
 	{
-		return color;
+		return color.toString();
 	}
 	public Circle createAnimation(Circle c) {
 		c.setFill(Color.valueOf("#f44d4d"));

@@ -117,6 +117,7 @@ public class Loader
 		catch(IOException e)
 		{
 			System.out.println("Exception in saveData");
+			e.printStackTrace();
 		}	
 	}
 	public ArrayList<Object> LoadData()

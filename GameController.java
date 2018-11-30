@@ -79,7 +79,9 @@ public class GameController implements Initializable
 	Shield s;
 	int ShieldFlag = 0;
 	int GameOverFlag = 0;
-	ArrayList<Token> tokens = new ArrayList<Token>();
+	ArrayList<Object> tokens = new ArrayList<Object>();
+	ArrayList<Object> resumedTokens = new ArrayList<Object>();
+	boolean resume=false;
 	@Override
 	public void initialize(URL url, ResourceBundle rb)
 	{
@@ -112,11 +114,15 @@ public class GameController implements Initializable
 		timeline.setCycleCount(Animation.INDEFINITE);
 		timeline.play();
 		try {
-			createDisplay();
+			//if(resume=false)
+			//{
+				createDisplay();
+			//}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 		}
 	}
+	
 	@FXML
 	public void createDisplay() throws FileNotFoundException {
 		b = new Ball(2);
@@ -164,6 +170,17 @@ public class GameController implements Initializable
 //		AP.getChildren().add(d.getId());
 //		tokens.add(d);
 	}
+	void setResume(boolean b)
+	{
+		resume=b;
+	}
+	void setResume(boolean b,ArrayList<Object> a)
+	{
+		resume=b;
+		resumedTokens=a;
+		tokens=a;
+	}
+	
 	@FXML
 	private void displayPosition(MouseEvent event)
 	{
@@ -171,11 +188,18 @@ public class GameController implements Initializable
 	}
 	@FXML
 	void onPause(ActionEvent event) throws IOException{
+		//System.out.println("Game Controller");
+		if(transitionIsPlay)
+		{
+			transition.pause();
+		}
 		Parent ButtonClicked = FXMLLoader.load(getClass().getResource("PauseDialogBox.fxml"));
     	Scene s = new Scene(ButtonClicked,335,365);
     	Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());
     	window.setScene(s);
     	window.show();
+    	Loader l= new Loader();
+		l.serialize(tokens);
 	}
 	@FXML
 	public void GameOver() {
@@ -324,7 +348,7 @@ public class GameController implements Initializable
 	void onHit(){
 		for(int i=0;i<tokens.size();i++)
 		{
-			Token token = tokens.get(i);
+			Token token = (Token)tokens.get(i);
 			if(game.getSnake().getId().getBoundsInParent().intersects(token.getId().getBoundsInParent()))
 			{
 				if(token.getClass().equals(ChainOfBlocks.class))
