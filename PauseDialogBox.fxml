@@ -5,7 +5,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="365.0" prefWidth="330.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
    <children>
-      <Button layoutX="115.0" layoutY="67.0" mnemonicParsing="false" style="-fx-font-size: 15; -fx-min-width: 100;" text="Continue" />
+      <Button layoutX="115.0" layoutY="67.0" mnemonicParsing="false" onAction="#onResume" style="-fx-font-size: 15; -fx-min-width: 100;" text="Continue" />
       <Button layoutX="115.0" layoutY="129.0" mnemonicParsing="false" onAction="#onRestart" style="-fx-font-size: 15; -fx-min-width: 100;" text="Restart" />
       <Button layoutX="115.0" layoutY="192.0" mnemonicParsing="false" onAction="#onEndGame" style="-fx-font-size: 15; -fx-min-width: 100;" text="End Game" />
       <Button layoutX="115.0" layoutY="256.0" mnemonicParsing="false" onAction="#onMainMenu" style="-fx-font-size: 15; -fx-min-width: 100;" text="Main Menu" />
