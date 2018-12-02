@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import com.sun.javafx.geom.Vec2d;
@@ -169,8 +170,8 @@ public class GameController extends Controller implements Initializable
 		AP.getChildren().add(m.getId());
 		tokens.add(m);
 		s = new Shield();
-		s.getId().setLayoutY(600);
-		s.getId().setLayoutX(190);
+		s.getId().setLayoutY(197);
+		s.getId().setLayoutX(200);
 		AP.getChildren().add(s.getId());
 		tokens.add(s);
 		ArrayList<ChainOfBlocks> arr = new ArrayList<ChainOfBlocks>();
@@ -182,6 +183,7 @@ public class GameController extends Controller implements Initializable
 //		AP.getChildren().add(d.getId());
 //		tokens.add(d);
 	}
+	
 	void createDisplay(ArrayList<Object> a)
 	{
 		for(Object token: a)
@@ -229,6 +231,78 @@ public class GameController extends Controller implements Initializable
 			}
 		}
 	}
+	
+	void createD(int time)
+	{
+		Snake snk=new Snake(Score);
+		Random r= new Random();
+		int l_chain=r.nextInt(7)+1;
+		ChainOfBlocks cb=new ChainOfBlocks(l_chain,snk.getLength());
+		ArrayList<Object> a=new ArrayList<Object>();
+		a.add(cb);
+		AssignTransition(a,time);
+	}
+	ArrayList<PathTransition> AssignTransition(ArrayList<Object> a,int time)
+	{
+		ArrayList<PathTransition> downMovement= new ArrayList<PathTransition>();
+		for(Object token:a)
+		{
+			Path path= new Path();
+			path.getElements().add(new MoveTo(0,0));
+			path.getElements().add(new VLineTo(600));
+			PathTransition temp= new PathTransition();
+			
+			//transition.play();
+			if(token instanceof Ball)
+			{
+				Ball b=(Ball)token;
+				temp.setNode(b.getId());
+			}
+			else if(token instanceof ChainOfBlocks)
+			{
+				ChainOfBlocks c=(ChainOfBlocks)token;
+				temp.setNode(c.getId());
+			}
+			else if(token instanceof DestroyBlock)
+			{
+				DestroyBlock db=(DestroyBlock)token;
+				temp.setNode(db.getId());
+			}
+			else if(token instanceof Magnet)
+			{
+				Magnet m=(Magnet)token;
+				temp.setNode(m.getId());
+			}
+			else if(token instanceof Shield)
+			{
+				Shield s=(Shield)token;
+				temp.setNode(s.getId());
+			}
+			else if(token instanceof Snake)
+			{
+				Snake snk=(Snake)token;
+				//temp.setNode(snk.getId());
+			}
+			else if(token instanceof Wall)
+			{
+				Wall w=(Wall)token;
+				temp.setNode(w.getId());
+			}
+
+			temp.setDuration(Duration.seconds(time));
+			temp.setPath(path);
+			downMovement.add(temp);
+		}
+		return downMovement;
+	}
+	void startTransition(ArrayList<PathTransition> a)
+	{
+		for(PathTransition tr:a)
+		{
+			tr.play();
+		}
+	}
+	
 	void setResume(boolean b)
 	{
 		resume=b;
