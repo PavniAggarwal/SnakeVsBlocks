@@ -4,7 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.ResourceBundle;
 
 import com.sun.javafx.geom.Vec2d;
@@ -12,7 +11,6 @@ import com.sun.javafx.geom.Vec2d;
 import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
-import javafx.animation.KeyValue;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PathTransition;
 import javafx.animation.ScaleTransition;
@@ -22,7 +20,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -38,7 +35,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class GameController implements Initializable
+public class GameController extends Controller implements Initializable
 {
 	@FXML
 	private Group snake;
@@ -81,10 +78,14 @@ public class GameController implements Initializable
 	int GameOverFlag = 0;
 	ArrayList<Object> tokens = new ArrayList<Object>();
 	ArrayList<Object> resumedTokens = new ArrayList<Object>();
-	boolean resume=false;
+	ArrayList<Wall> walls = new ArrayList<Wall>();
+	boolean resume;
 	@Override
 	public void initialize(URL url, ResourceBundle rb)
-	{
+	{	
+		System.out.println("boolean resume: "+ resume);
+		resume=sendResume();
+		resumedTokens=sendArray();
 		game = new Game();
 		Snake snk = new Snake(Score);
 		snk.getId().setLayoutX(200);
@@ -101,7 +102,7 @@ public class GameController implements Initializable
 
 		transition= new PathTransition();
 		transition.setNode(game.getSnake().getId());
-		transition.setDuration(Duration.seconds(5));
+		transition.setDuration(Duration.seconds(10));
 		transition.setPath(path);
 		transition.play();
 		transitionIsPlay = true;
@@ -113,18 +114,27 @@ public class GameController implements Initializable
 				}));
 		timeline.setCycleCount(Animation.INDEFINITE);
 		timeline.play();
-		try {
-			//if(resume=false)
-			//{
+		if(resume==false)
+		{
+			System.out.println("in if");
+			try {
 				createDisplay();
-			//}
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		else
+		{
+			System.out.println("in else");
+			createDisplay(resumedTokens);
+		}
+		
 	}
 	
 	@FXML
-	public void createDisplay() throws FileNotFoundException {
+	public void createDisplay() throws FileNotFoundException{
+	
 		b = new Ball(2);
 		b.getId().setLayoutX(150);
 		b.getId().setLayoutY(500);
@@ -140,27 +150,29 @@ public class GameController implements Initializable
 		c.getId().setLayoutY(100);
 		AP.getChildren().add(c.getId());
 		tokens.add(c);
-//		Wall wall = new Wall(100);
-//		wall.getId().setLayoutY(132);
-//		AP.getChildren().add(wall.getId());
+		Wall wall = new Wall(100);
+		wall.getId().setLayoutY(132);
+		AP.getChildren().add(wall.getId());
+		walls.add(wall);
+		ChainOfBlocks c1 = new ChainOfBlocks(3,game.getSnake().getLength());
+		c1.getId().setLayoutX(0);
+		c1.getId().setLayoutY(250);
+		AP.getChildren().add(c1.getId());
+		tokens.add(c1);
 		ArrayList<Ball> arr2 = new ArrayList<Ball>();
 		arr2.add(b);
 		arr2.add(ball);
 		m = new Magnet();
-		m.getId().setLayoutY(300);
-		m.getId().setLayoutX(190);
+		m.getId().setLayoutY(500);
+		m.getId().setLayoutX(230);
 		m.setList(arr2);
 		AP.getChildren().add(m.getId());
 		tokens.add(m);
 		s = new Shield();
-		s.getId().setLayoutY(500);
-		s.getId().setLayoutX(230);
+		s.getId().setLayoutY(600);
+		s.getId().setLayoutX(190);
 		AP.getChildren().add(s.getId());
 		tokens.add(s);
-//		if(s.getClass().equals(Shield.class))
-//		{
-//			System.out.println("Same");
-//		}
 		ArrayList<ChainOfBlocks> arr = new ArrayList<ChainOfBlocks>();
 		arr.add(c);
 //		d = new DestroyBlock();
@@ -170,17 +182,61 @@ public class GameController implements Initializable
 //		AP.getChildren().add(d.getId());
 //		tokens.add(d);
 	}
+	void createDisplay(ArrayList<Object> a)
+	{
+		for(Object token: a)
+		{
+			if(token instanceof Ball)
+			{
+				Ball b=(Ball)token;
+				AP.getChildren().add(b.getId());
+				System.out.println(b.getClass()+" value: "+b.getValue());
+			}
+			else if(token instanceof ChainOfBlocks)
+			{
+				ChainOfBlocks c=(ChainOfBlocks)token;
+				AP.getChildren().add(c.getId());
+				System.out.println(c.getClass()+" length: "+c.getLength());
+				for(int i=0;i<c.getLength();i++)
+				{
+					System.out.println((i+1)+"Value: "+c.getChain().get(i).getValue()+" color: "+c.getChain().get(i).getColor());
+				}
+			}
+			else if(token instanceof DestroyBlock)
+			{
+				DestroyBlock db=(DestroyBlock)token;
+				AP.getChildren().add(db.getId());
+			}
+			else if(token instanceof Magnet)
+			{
+				Magnet m=(Magnet)token;
+				AP.getChildren().add(m.getId());
+			}
+			else if(token instanceof Shield)
+			{
+				Shield s=(Shield)token;
+				AP.getChildren().add(s.getId());
+			}
+			else if(token instanceof Snake)
+			{
+				Snake snk=(Snake)token;
+				AP.getChildren().add(snk.getId());
+			}
+			else if(token instanceof Wall)
+			{
+				Wall w=(Wall)token;
+				AP.getChildren().add(w.getId());
+			}
+		}
+	}
 	void setResume(boolean b)
 	{
 		resume=b;
 	}
-	void setResume(boolean b,ArrayList<Object> a)
+	void setRTokens(ArrayList<Object> a)
 	{
-		resume=b;
 		resumedTokens=a;
-		tokens=a;
 	}
-	
 	@FXML
 	private void displayPosition(MouseEvent event)
 	{
@@ -188,7 +244,7 @@ public class GameController implements Initializable
 	}
 	@FXML
 	void onPause(ActionEvent event) throws IOException{
-		//System.out.println("Game Controller");
+		
 		if(transitionIsPlay)
 		{
 			transition.pause();
@@ -364,17 +420,26 @@ public class GameController implements Initializable
 					}
 					System.out.println(token.getClass());
 					GameOverFlag = c.getGameOverFlag();
-					if(GameOverFlag==1)
-					{
-						
-					}
 				}
-				if(token.getClass().equals(Shield.class))
+				else
 				{
-					ShieldFlag = 1;
+					if(token.getClass().equals(Shield.class))
+					{
+						Shield s = (Shield) token;
+						ShieldFlag = 1;
+						Timeline timeline = new Timeline(new KeyFrame(
+								Duration.millis(5200),
+								ae-> {									
+								}));
+						timeline.play();
+						timeline.setOnFinished((e)->{
+						ShieldFlag = 0;
+						AP.getChildren().remove(s.getTimer());
+						});
+					}
+					token.Hit(game.getSnake(), AP);
 				}
 				tokens.remove(token);
-				token.Hit(game.getSnake(), AP);
 				System.out.println(token.getClass());
 			}
 		}
@@ -448,14 +513,25 @@ public class GameController implements Initializable
 	@FXML
 	void moveLeft() 
 	{
+		
 		if(transitionIsPlay)
 		{
 			transition.pause();
+			transitionIsPlay = false;
 		}
 		//snake.setTranslateX(-50);
-		game.getSnake().getId().setLayoutX(game.getSnake().getId().getLayoutX() - 50);
-		game.getSnake().DecLength(1);
+		game.getSnake().getId().setLayoutX(game.getSnake().getId().getLayoutX() - 10);
+		for(int i=0;i<walls.size();i++)
+		{
+			if(game.getSnake().getId().getBoundsInParent().intersects(walls.get(i).getId().getBoundsInParent()))
+			{
+				game.getSnake().getId().setLayoutX(game.getSnake().getId().getLayoutX() + 10);
+				break;
+			}
+		}
+		//game.getSnake().DecLength(1);
 		transition.play();
+		transitionIsPlay = true;
 		//Path path=new Path();
 		//path.getElements().add(new MoveTo(snake.getLayoutX(),snake.getLayoutY()));
 		//path.getElements().add(new MoveTo(0,0));
@@ -477,10 +553,19 @@ public class GameController implements Initializable
 		if(transitionIsPlay)
 		{
 			transition.pause();
+			transitionIsPlay = false;
 		}
 		//snake.setTranslateX(50);
-		game.getSnake().getId().setLayoutX(game.getSnake().getId().getLayoutX() + 50);
-		game.getSnake().IncLength(1);
+		game.getSnake().getId().setLayoutX(game.getSnake().getId().getLayoutX() + 10);
+		for(int i=0;i<walls.size();i++)
+		{
+			if(game.getSnake().getId().getBoundsInParent().intersects(walls.get(i).getId().getBoundsInParent()))
+			{
+				game.getSnake().getId().setLayoutX(game.getSnake().getId().getLayoutX() - 10);
+				break;
+			}
+		}
+		//game.getSnake().IncLength(1);
 		//Circle c = new Circle(8);
 		//c.setLayoutY((Integer.parseInt(SnakeLength.getText())+1)*15);
 //		SnakeLength.setText(String.valueOf(Integer.parseInt(SnakeLength.getText())+1));
@@ -497,6 +582,7 @@ public class GameController implements Initializable
 		PaneTransition.setPath(path);
 		PaneTransition.play();
 		transition.play();
+		transitionIsPlay = true;
 		//Path path=new Path();
 		//path.getElements().add(new MoveTo(snake.getLayoutX(),snake.getLayoutY()));
 		//path.getElements().add(new HLineTo(30));
