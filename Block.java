@@ -27,7 +27,8 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class Block {
-	private Color [] Colors = {Color.LIGHTSKYBLUE,Color.CHARTREUSE,Color.CORNFLOWERBLUE,Color.DARKGRAY,Color.DARKSALMON,Color.KHAKI,Color.ORANGE}; 
+	private Color [] Colors = {Color.LIGHTSKYBLUE,Color.CHARTREUSE,Color.CORNFLOWERBLUE,Color.DARKGRAY,Color.DARKSALMON,Color.KHAKI,Color.ORANGE};
+	private String nameOfColors[]= {"LIGHTSKYBLUE","CHARTREUSE","CORNFLOWERBLUE","DARKGRAY","DARKSALMON","KHAKI","ORANGE"};
 	@FXML
 	private Group block;
 	@FXML
@@ -36,7 +37,7 @@ public class Block {
 	private Text tb;
 	ParallelTransition p;
 	private int value;
-	private Color color;
+	private String color;
 	
 	Block(int v) {
 		block = new Group();
@@ -68,7 +69,7 @@ public class Block {
 		Random rand = new Random();
 		int n = rand.nextInt(7);
 		rect.setFill(Colors[n]);
-		color=Colors[n];
+		color=nameOfColors[n];
 		block.getChildren().add(rect);
 		tb = new Text();
 		if(v<10)
@@ -86,6 +87,19 @@ public class Block {
 		block.getChildren().add(tb);
 		value = v;
 		setTransition();
+	}
+	private Color findColor(String c)
+	{
+		int n=0;
+		for(int i=0;i<nameOfColors.length;i++)
+		{
+			if(nameOfColors[i].equals(c))
+			{
+				n=i;
+				break;
+			}
+		}
+		return Colors[n];
 	}
 	public Block(int v,String c,double x,double y)
 	{
@@ -117,7 +131,7 @@ public class Block {
 		rect.setArcHeight(5.0);
 		rect.setArcWidth(5.0);
 		rect.setStroke(Color.BLACK);
-		rect.setFill(Color.valueOf(c));
+		rect.setFill(findColor(c));
 		block.getChildren().add(rect);
 		tb = new Text();
 		if(v<10)
@@ -138,7 +152,7 @@ public class Block {
 	}
 	public String getColor()
 	{
-		return color.toString();
+		return color;
 	}
 	public Circle createAnimation(Circle c) {
 		c.setFill(Color.valueOf("#f44d4d"));
@@ -339,7 +353,21 @@ public class Block {
 					    	}	    	
 					    	}
 					    ),
-					    new KeyFrame(Duration.seconds(0.5), actionEvent -> {
+					    new KeyFrame(Duration.seconds(1.5), actionEvent -> {
+							if(f==1)
+							{
+								Parent root;
+								try {
+									root = FXMLLoader.load(getClass().getResource("GameOver.fxml"));
+									Stage window = (Stage) AP.getScene().getWindow();
+							        window.setScene(new Scene(root, 335, 600));
+							        window.show();
+								} catch (IOException e) {
+								}
+								catch (NullPointerException e) {}
+							}
+					    }),
+					    new KeyFrame(Duration.seconds(3), actionEvent -> {
 					    	if(f==0)
 							{
 					    		//s.getId().setLayoutY(s.getId().getLayoutY()-5);
@@ -354,7 +382,7 @@ public class Block {
 								block.getChildren().remove(0);
 								});
 							}
-							else
+							/*else
 							{
 								Parent root;
 								try {
@@ -365,12 +393,12 @@ public class Block {
 								} catch (IOException e) {
 								}
 								catch (NullPointerException e) {}
-							}
+							}*/
 					    })				    
 					    //new KeyFrame(Duration.seconds(3), actionEvent -> System.out.println("4"))
 					);
 					t.playFromStart();
-					t.getKeyFrames().add(new KeyFrame(Duration.seconds(1), actionEvent ->{
+					t.getKeyFrames().add(new KeyFrame(Duration.seconds(3), actionEvent ->{
 						s.getTransition().play();
 					}
 					));
