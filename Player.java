@@ -7,6 +7,7 @@ public class Player
 	private SimpleStringProperty name;
 	private SimpleStringProperty rank;
 	private SimpleStringProperty score;
+	
 	public void setName(String n)
 	{
 		name=new SimpleStringProperty(n);
@@ -21,10 +22,12 @@ public class Player
 	public String getScore() {
 		return score.get();
 	}
-	public void setRank(String r) {
-		rank = new SimpleStringProperty(r);
+	public void setRank(String n)
+	{
+		rank=new SimpleStringProperty(n);
 	}
-	public String getrank() {
+	public String getRank()
+	{
 		return rank.get();
 	}
 	public Player(String r,String n,String s)
@@ -32,5 +35,7 @@ public class Player
 		rank=new SimpleStringProperty(r);
 		name=new SimpleStringProperty(n);
 		score=new SimpleStringProperty(s);
+		
+		
 	}
 }
