@@ -25,7 +25,7 @@ public class DestroyBlock extends Token
 	}
 	DestroyBlock(double x,double y) throws FileNotFoundException 
 	{
-		FileInputStream input = new FileInputStream("C:\\Users\\PAVNI\\eclipse-workspace\\SnakeVsBlock\\src\\application\\DestroyBlock.jpg");
+		FileInputStream input = new FileInputStream("C:\\Users\\PAVNI\\eclipse-workspace\\SnakeVsBlock\\src\\application\\DestoyBlock.jpg");
 		Image pic = new Image(input);
 		db = new ImageView();
 		db.setImage(pic);
