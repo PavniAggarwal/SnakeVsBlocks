@@ -3,6 +3,8 @@ package application;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+import org.pdfsam.ui.RingProgressIndicator;
+
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -12,9 +14,10 @@ public class Shield extends Token
 {
 	@FXML
 	private ImageView shield;
+	Timer t;
 	Shield() throws FileNotFoundException 
 	{
-		FileInputStream input = new FileInputStream("C:\\Users\\PAVNI\\eclipse-workspace\\SnakeVsBlock\\src\\application\\Shield.jpg");
+		FileInputStream input = new FileInputStream("C:\\Users\\PAVNI\\eclipse-workspace\\SnakeVsBlock\\src\\application\\Shield.JPG");
 		Image pic = new Image(input);
 		shield = new ImageView();
 		shield.setImage(pic);
@@ -23,17 +26,15 @@ public class Shield extends Token
 	}
 	Shield(double x, double y) throws FileNotFoundException 
 	{
-		FileInputStream input = new FileInputStream("C:\\Users\\PAVNI\\eclipse-workspace\\SnakeVsBlock\\src\\application\\Shield.jpg");
+		FileInputStream input = new FileInputStream("C:\\Users\\PAVNI\\eclipse-workspace\\SnakeVsBlock\\src\\application\\Shield.JPG");
 		Image pic = new Image(input);
 		shield = new ImageView();
 		shield.setImage(pic);
 		shield.setFitHeight(25.0);
 		shield.setFitWidth(25.0);
 		shield.setLayoutX(x);
-		shield.setLayoutY(y);
-		
+		shield.setLayoutY(y);	
 	}
-	
 	public double getX()
 	{
 		return shield.getLayoutX();
@@ -52,6 +53,12 @@ public class Shield extends Token
 	}
 	public void Hit(Snake s,AnchorPane AP) 
 	{
+		AP.getChildren().remove(shield);
+		t= new Timer(AP);
+		t.startTimer();
 		
+	}
+	public RingProgressIndicator getTimer() {
+		return t.getRingProgressIndicator();
 	}
 }
