@@ -14,6 +14,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Controller implements Initializable{
+	private boolean resume=false;
+	private ArrayList<Object> a;
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
@@ -116,18 +119,24 @@ public class Controller implements Initializable{
 	@FXML
 	void onResume(ActionEvent event) throws IOException
 	{
-		
+		//setResume(true);
+		resume=true;
+		Loader l= new Loader();
+    	ArrayList<Object> a=l.deserialize();
+    	//setRTokens(a);
 		Parent ButtonClicked = FXMLLoader.load(getClass().getResource("Game.fxml"));
     	Scene s = new Scene(ButtonClicked,335,600);
     	Stage window = (Stage) (((Node) event.getSource()).getScene().getWindow());
     	window.setScene(s);
     	window.show();
-    	
-    	Loader l= new Loader();
-    	l.deserialize();
-    	//FXMLLoader f=FXMLLoader.load(getClass().getResource("Game.fxml"));
-    	//GameController gc=f.getController();
-		//gc.setResume(true,a);
-		
+	}
+	public boolean sendResume()
+	{
+		return resume;
+	}
+	
+	public ArrayList<Object> sendArray()
+	{
+		return a;
 	}
 }
