@@ -1,0 +1,11 @@
+.circleindicator-container  {	
+	circleindicator-color: #009383;
+	-fx-padding: 0.0;
+	-fx-background-color: -fx-background;
+}
+.circleindicator-container > .circleindicator-label {
+	-fx-font-weight: bold; 
+ 	-fx-font-size: 1.2em;
+	-fx-text-fill: circleindicator-color;
+	-fx-padding: 1.0;
+}
